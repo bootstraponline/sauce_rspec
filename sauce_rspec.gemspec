@@ -22,6 +22,7 @@ Gem::Specification.new do |spec|
   spec.add_runtime_dependency 'rspec', '~> 3.3.0'
   spec.add_runtime_dependency 'parallel_tests', '~> 1.6.0'
 
+  spec.add_development_dependency 'appium_thor', '~> 1.0.1'
   spec.add_development_dependency 'coveralls', '~> 0.8.2'
   spec.add_development_dependency 'pry', '~> 0.10.1'
   spec.add_development_dependency 'sauce_platforms', '~> 1.0.5'
