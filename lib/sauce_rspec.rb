@@ -1,5 +1,2 @@
-require "sauce_rspec/version"
-
-module SauceRspec
-  # Your code goes here...
-end
+require_relative 'sauce_rspec/version'
+require_relative 'sauce_rspec/config'

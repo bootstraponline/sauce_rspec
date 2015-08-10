@@ -1,24 +1,30 @@
-# coding: utf-8
-lib = File.expand_path('../lib', __FILE__)
-$LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
-require 'sauce_rspec/version'
+require_relative 'lib/sauce_rspec/version'
+
+# rubocop:disable Style/SpaceAroundOperators
 
 Gem::Specification.new do |spec|
-  spec.name          = "sauce_rspec"
-  spec.version       = SauceRspec::VERSION
-  spec.authors       = ["bootstraponline"]
-  spec.email         = ["code@bootstraponline.com"]
+  spec.required_ruby_version = '>= 2.2.2'
 
-  spec.summary       = 'Sauce rspec integration'
-  spec.description   = spec.summary += '.'
+  spec.name          = 'sauce_rspec'
+  spec.version       = SauceRSpec::VERSION
+  spec.date          = SauceRSpec::DATE
+  spec.license       = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+  spec.description   = spec.summary = 'Sauce rspec integration'
+  spec.description   += '.' # avoid identical warning
+  spec.authors       = spec.email = ['code@bootstraponline.com']
   spec.homepage      = 'https://github.com/bootstraponline/sauce_rspec'
+  spec.require_paths = ['lib']
 
+  spec.files = `git ls-files -z`.split("\x0").reject do |f|
+    f.match(%r{^(test|spec|features)/})
+  end
 
-  spec.files         = `git ls-files -z`.split("\x0").reject { |f| f.match(%r{^(test|spec|features)/}) }
-  spec.bindir        = "exe"
-  spec.executables   = spec.files.grep(%r{^exe/}) { |f| File.basename(f) }
-  spec.require_paths = ["lib"]
+  spec.add_runtime_dependency 'rspec', '~> 3.3.0'
+  spec.add_runtime_dependency 'parallel_tests', '~> 1.6.0'
 
-  spec.add_development_dependency "bundler", "~> 1.9"
-  spec.add_development_dependency "rake", "~> 10.0"
+  spec.add_development_dependency 'pry', '~> 0.10.1'
+  spec.add_development_dependency 'sauce_platforms', '~> 1.0.5'
+  spec.add_development_dependency 'bundler', '~> 1.10.6'
+  spec.add_development_dependency 'rake', '~> 10.4.2'
+  spec.add_development_dependency 'rubocop', '~> 0.33.0'
 end
