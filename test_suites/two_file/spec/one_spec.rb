@@ -1,7 +1,8 @@
 require_relative 'spec_helper'
 
-describe 'one' do
-  it 'one' do
+describe 'describe one' do
+  it 'it one' do
     puts 'test one'
+    write_env
   end
 end
