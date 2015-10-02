@@ -2,14 +2,17 @@ require_relative '../../../lib/sauce_rspec'
 require_relative 'sauce_helper'
 require 'pry'
 
-def write_env
-  example = RSpec.current_example
-  return unless example.respond_to?(:test_queue_sauce)
+$test_count = 0
 
-  name = example.test_queue_sauce
+def write_env
+  target = RSpec.current_example
+  target = target.respond_to?(:caps) ? target : target.example_group
+  caps = target.respond_to?(:caps) ? target.caps.to_s : ''
+
+  name   = "test_#{$test_count+=1}_" + File.basename(target.id) + caps
   output = File.expand_path(File.join(__dir__, '..', name))
 
-  File.open(output, 'w') {}
+  File.open(output, 'w') { |f| f.puts target.location }
 end
 
 RSpec.configure do |config|

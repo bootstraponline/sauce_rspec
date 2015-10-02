@@ -16,6 +16,10 @@ module SauceRSpec
       @caps = []
       @opts = {}
     end
+
+    def to_h
+      { caps: @caps.dup, opts: @opts.dup }
+    end
   end # class Config
 
   @config = SauceRSpec::Config.new
