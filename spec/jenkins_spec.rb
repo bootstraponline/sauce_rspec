@@ -9,6 +9,14 @@ describe ' SauceRSpec Jenkins' do
     end
   end
 
+  def stub_run_after_test_hooks
+    passed_true_json = %q({"passed":true})
+
+    stub_request(:put, 'https://appium_user:appium_key@saucelabs.com/rest/v1/appium_user/jobs/123').
+      with(body: passed_true_json).
+      to_return(body: passed_true_json)
+  end
+
   it 'integrates with Jenkins properly' do
     ENV['JENKINS_SERVER_COOKIE'] = 'true'
     SauceRSpec.driver            = Class.new do
@@ -17,14 +25,12 @@ describe ' SauceRSpec Jenkins' do
       end
     end.new
 
-    passed_true_json = %q({"passed":true})
+    # make sure running the hook more than once works as expected.
+    stub_run_after_test_hooks
+    SauceRSpec.run_after_test_hooks timeout: 1
 
-    stub_request(:put, 'https://appium_user:appium_key@saucelabs.com/rest/v1/appium_user/jobs/123').
-      with(body: passed_true_json).
-      to_return(body: passed_true_json)
-
+    stub_run_after_test_hooks
     stdout = StringIO.new
-
     SauceRSpec.run_after_test_hooks timeout: 1, stdout: stdout
 
     stdout.flush

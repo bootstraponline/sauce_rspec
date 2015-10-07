@@ -24,9 +24,10 @@ module SauceRSpec
     def update_job_status_on_sauce timeout
       # https://docs.saucelabs.com/reference/rest-api/#update-job
       # https://saucelabs.com/rest/v1/:username/jobs/:job_id
+      config = SauceRSpec.config
+      user   = config.user
       unless update_job
-        key  = SauceRSpec.config.key
-        user = SauceRSpec.config.user
+        key = config.key
 
         request                 = Curl::Easy.new('')
         request.http_auth_types = :basic
@@ -52,7 +53,7 @@ module SauceRSpec
           fail(::Errno::ECONNREFUSED, response_error)
         end
 
-       response_passed == passed[:passed] ? true : fail(response)
+        response_passed == passed[:passed] ? true : fail(response)
       end
     end
 
