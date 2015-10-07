@@ -6,8 +6,14 @@
 
 A new [Ruby gem](https://github.com/bootstraponline/meta/wiki/Sauce_Ruby_Integration_Roadmap) for using RSpec on Sauce.
 
-
 ```
 require 'sauce_rspec'
 require 'sauce_rspec/rspec'
+```
+
+Note that for Jenkins support, you must enable verbose mod in test-queue
+otherwise stdout will not be printed in the Jenkins log.
+
+```
+export TEST_QUEUE_VERBOSE=true
 ```
