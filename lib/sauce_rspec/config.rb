@@ -23,6 +23,14 @@ module SauceRSpec
       @caps = value
     end
 
+    # After defining the specific caps, the default_caps method may be used
+    # to add default values to all previously defined caps. If a cap is already
+    # present then the default will be ignored.
+    def default_caps default
+      fail 'default caps must be a hash' unless default && default.is_a?(Hash)
+      @caps.each { |cap| cap.merge!(default) { |_key, oldval, _newval| oldval } }
+    end
+
     def clear
       @caps = []
       @opts = {}

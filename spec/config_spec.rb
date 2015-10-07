@@ -37,18 +37,37 @@ describe SauceRSpec::Config do
     expect(actual_opts).to eq(expected_opts)
   end
 
-  it 'supports first class options' do
-    user_value = 'some user'
-    key_value  = 'some key'
-    port_value = 'some port'
-    host_value = 'some host'
+  def user_value
+    'some user'
+  end
+
+  def key_value
+    'some key'
+  end
+
+  def port_value
+    'some port'
+  end
+
+  def host_value
+    'some host'
+  end
+
+  def config_with_user_key_port_host
     SauceRSpec.config do |config|
       config.user = user_value
       config.key  = key_value
       config.port = port_value
       config.host = host_value
     end
+  end
 
+  def expected_cap_value
+    [{ browserName: 'firefox', platform: 'Windows 2012', version: '37' }]
+  end
+
+  it 'supports first class options' do
+    config_with_user_key_port_host
     actual_config = SauceRSpec.config
 
     expected_config = OpenStruct.new(user: user_value,
@@ -60,15 +79,32 @@ describe SauceRSpec::Config do
     expect(actual_config.key).to eq(expected_config.key)
     expect(actual_config.port).to eq(expected_config.port)
     expect(actual_config.host).to eq(expected_config.host)
+  end
 
-    # Verify config.to_h
-    expected_hash = { caps: [['Windows 2012', 'firefox', '37']],
+  it 'converts to a hash successfully' do
+    config_with_user_key_port_host
+    actual_config = SauceRSpec.config
+
+    expected_hash = { caps: expected_cap_value,
                       opts: {},
-                      user: 'some user',
-                      key:  'some key',
-                      host: 'some host',
-                      port: 'some port' }
+                      user: user_value,
+                      key:  key_value,
+                      host: host_value,
+                      port: port_value }
     expect(actual_config.to_h).to eq(expected_hash)
+  end
+
+  it 'allows default caps' do
+    actual_config = SauceRSpec.config
+    expected_caps = expected_cap_value
+    expect(actual_config.caps).to eq(expected_caps)
+
+    job_cap = { build: 'job-name-4' }
+    SauceRSpec.config.default_caps job_cap
+    new_expected_caps = expected_caps.clone.each { |cap| cap.merge!(job_cap) }
+    expect(actual_config.caps).to eq(new_expected_caps)
+
+    expect { SauceRSpec.config.default_caps nil }.to raise_exception 'default caps must be a hash'
   end
 
   it 'supports generating a sauce url' do
