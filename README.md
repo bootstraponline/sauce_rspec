@@ -1,6 +1,6 @@
 # Sauce RSpec
 
-[![Build Status](https://travis-ci.org/bootstraponline/sauce_rspec.svg)](https://travis-ci.org/bootstraponline/sauce_rspec)
+[![Build Status](https://travis-ci.org/bootstraponline/sauce_rspec.svg)](https://travis-ci.org/bootstraponline/sauce_rspec/builds)
 [![Gem Version](https://badge.fury.io/rb/sauce_rspec.svg)](https://rubygems.org/gems/sauce_rspec)
 [![Coverage Status](https://coveralls.io/repos/bootstraponline/sauce_rspec/badge.svg?branch=master&service=github&nocache=true)](https://coveralls.io/github/bootstraponline/sauce_rspec?branch=master)
 
