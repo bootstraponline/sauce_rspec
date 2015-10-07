@@ -61,4 +61,24 @@ describe SauceRSpec::Config do
     expect(actual_config.port).to eq(expected_config.port)
     expect(actual_config.host).to eq(expected_config.host)
   end
+
+  it 'supports generating a sauce url' do
+    SauceRSpec.config do |config|
+      config.user = nil
+      config.key  = nil
+      config.port = nil
+      config.host = nil
+    end
+
+    expect { SauceRSpec.config.url }.to raise_error 'Missing user'
+    SauceRSpec.config { |c| c.user = 'user1' }
+    expect { SauceRSpec.config.url }.to raise_error 'Missing key'
+    SauceRSpec.config { |c| c.key = 'key2' }
+    expect { SauceRSpec.config.url }.to raise_error 'Missing host'
+    SauceRSpec.config { |c| c.host = 'host3' }
+    expect { SauceRSpec.config.url }.to raise_error 'Missing port'
+    SauceRSpec.config { |c| c.port = 'port4' }
+
+    expect(SauceRSpec.config.url).to eq('http://user1:key2@host3:port4/wd/hub')
+  end
 end
