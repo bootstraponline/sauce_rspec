@@ -20,6 +20,6 @@ class ::Default < Thor
 
   desc 'cop', 'Executes rubocop'
   def cop
-    exec 'bundle exec rubocop'
+    exec 'bundle exec rubocop --display-cop-names'
   end
 end

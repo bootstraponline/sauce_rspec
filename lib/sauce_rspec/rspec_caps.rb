@@ -14,9 +14,12 @@ module RSpec
         examples     = example_group.examples
         new_examples = []
         examples.each do |ex|
-          @caps.each do |cap|
+          # Use index to allow multiple duplicate caps to have unique ids
+          # ex: 1_firefox, 2_firefox
+          @caps.each_with_index do |cap, index|
             ex_with_cap = ex.clone
-            ex_with_cap.instance_variable_set(:@id, ex_with_cap.id + cap.to_s)
+            new_id = "#{ex_with_cap.id}_#{index}_#{cap}"
+            ex_with_cap.instance_variable_set(:@id, new_id)
             ex_with_cap.instance_eval "def caps; #{cap}; end"
             new_examples << ex_with_cap
           end
@@ -29,4 +32,4 @@ module RSpec
       end
     end
   end
-end
+end unless RSpec::Core::World.method_defined? :rspec_register

@@ -20,7 +20,9 @@ Gem::Specification.new do |spec|
   end
 
   spec.add_runtime_dependency 'rspec', '~> 3.3.0'
-  # spec.add_runtime_dependency 'parallel_tests', '~> 1.6.0'
+  spec.add_runtime_dependency 'webdriver_utils', '~> 1.0.2'
+  # Recommended way of doing parallel execution
+  spec.add_runtime_dependency 'test-queue-split', '~> 0.3.2'
 
   spec.add_development_dependency 'appium_thor', '~> 1.0.1'
   spec.add_development_dependency 'coveralls', '~> 0.8.2'

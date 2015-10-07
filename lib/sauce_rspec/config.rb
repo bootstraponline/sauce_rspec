@@ -1,10 +1,19 @@
 module SauceRSpec
   class Config
     attr_reader :caps
-    attr_accessor :opts
+    attr_accessor :opts, :user, :key, :host, :port
 
     def initialize
       clear
+    end
+
+    # Sauce URL
+    def url
+      fail 'Missing user' unless user
+      fail 'Missing key' unless key
+      fail 'Missing host' unless host
+      fail 'Missing port' unless port
+      "http://#{user}:#{key}@#{host}:#{port}/wd/hub"
     end
 
     def caps= value
@@ -15,6 +24,10 @@ module SauceRSpec
     def clear
       @caps = []
       @opts = {}
+      @user = sauce_user
+      @key  = sauce_key
+      @host = 'ondemand.saucelabs.com'
+      @port = '80'
     end
 
     def to_h
