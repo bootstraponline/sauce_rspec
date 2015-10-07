@@ -1,4 +1,4 @@
 module SauceRSpec
-  VERSION = '0.0.0' unless defined? ::SauceRSpec::VERSION
-  DATE    = '2015-08-09' unless defined? ::SauceRSpec::DATE
+  VERSION = '0.0.1' unless defined? ::SauceRSpec::VERSION
+  DATE    = '2015-10-07' unless defined? ::SauceRSpec::DATE
 end
