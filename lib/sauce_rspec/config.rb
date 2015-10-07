@@ -37,7 +37,14 @@ module SauceRSpec
     end
 
     def to_h
-      { caps: @caps.dup, opts: @opts.dup }
+      {
+        caps: @caps.dup,
+        opts: @opts.dup,
+        user: @user.dup,
+        key:  @key.dup,
+        host: @host.dup,
+        port: @port.dup
+      }
     end
   end # class Config
 

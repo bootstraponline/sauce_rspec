@@ -60,6 +60,15 @@ describe SauceRSpec::Config do
     expect(actual_config.key).to eq(expected_config.key)
     expect(actual_config.port).to eq(expected_config.port)
     expect(actual_config.host).to eq(expected_config.host)
+
+    # Verify config.to_h
+    expected_hash = { caps: [['Windows 2012', 'firefox', '37']],
+                      opts: {},
+                      user: 'some user',
+                      key:  'some key',
+                      host: 'some host',
+                      port: 'some port' }
+    expect(actual_config.to_h).to eq(expected_hash)
   end
 
   it 'supports generating a sauce url' do
