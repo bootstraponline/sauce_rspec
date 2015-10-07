@@ -4,3 +4,5 @@ Style/MethodDefParentheses:
   Enabled: false
 Metrics/MethodLength:
   Enabled: false
+Metrics/LineLength:
+  Enabled: false
