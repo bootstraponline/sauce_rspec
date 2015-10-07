@@ -17,6 +17,14 @@ describe ' SauceRSpec Jenkins' do
       to_return(body: passed_true_json)
   end
 
+    def stub_run_after_test_hooks_error
+    passed_true_json = %q({"passed":true})
+
+    stub_request(:put, 'https://appium_user:appium_key@saucelabs.com/rest/v1/appium_user/jobs/123').
+      with(body: passed_true_json).
+      to_return(body: %q({"error": "Not authorized"}))
+  end
+
   it 'integrates with Jenkins properly' do
     ENV['JENKINS_SERVER_COOKIE'] = 'true'
     SauceRSpec.driver            = Class.new do
@@ -24,6 +32,10 @@ describe ' SauceRSpec Jenkins' do
         '123'
       end
     end.new
+
+    # Verify connection refused error returns immediately
+    stub_run_after_test_hooks_error
+    expect { SauceRSpec.run_after_test_hooks timeout: 999 }.to raise_error ::Errno::ECONNREFUSED
 
     # make sure running the hook more than once works as expected.
     stub_run_after_test_hooks
