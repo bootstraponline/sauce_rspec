@@ -2,6 +2,7 @@
 require 'bundler/setup'
 require 'pry'
 require 'ostruct'
+require 'webmock/rspec'
 
 require 'coveralls'
 Coveralls.wear!

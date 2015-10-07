@@ -23,7 +23,9 @@ Gem::Specification.new do |spec|
   spec.add_runtime_dependency 'webdriver_utils', '~> 1.0.2'
   # Recommended way of doing parallel execution
   spec.add_runtime_dependency 'test-queue-split', '~> 0.3.2'
+  spec.add_runtime_dependency 'curb', '~> 0.8.8'
 
+  spec.add_development_dependency 'webmock', '~> 1.21.0'
   spec.add_development_dependency 'appium_thor', '~> 1.0.1'
   spec.add_development_dependency 'coveralls', '~> 0.8.2'
   spec.add_development_dependency 'pry', '~> 0.10.2'

@@ -3,6 +3,8 @@ module SauceRSpec
     attr_reader :caps
     attr_accessor :opts, :user, :key, :host, :port
 
+    public
+
     def initialize
       clear
     end
@@ -28,6 +30,10 @@ module SauceRSpec
       @key  = sauce_key
       @host = 'ondemand.saucelabs.com'
       @port = '80'
+    end
+
+    def sauce?
+      @user && @key
     end
 
     def to_h
