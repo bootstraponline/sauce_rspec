@@ -9,14 +9,16 @@ module RSpec
       #
       # Register an example group.
       def register(example_group)
-        @caps ||= ::SauceRSpec.config.caps
+        # Use upstream register method if we're not configured to run on Sauce
+        config = ::SauceRSpec.config
+        return rspec_register(example_group) unless config.sauce?
 
         examples     = example_group.examples
         new_examples = []
         examples.each do |ex|
           # Use index to allow multiple duplicate caps to have unique ids
           # ex: 1_firefox, 2_firefox
-          @caps.each_with_index do |cap, index|
+          config.caps.each_with_index do |cap, index|
             ex_with_cap = ex.clone
             new_id      = "#{ex_with_cap.id}_#{index}_#{cap}"
             ex_with_cap.instance_variable_set(:@id, new_id)

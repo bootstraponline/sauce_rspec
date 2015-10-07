@@ -6,5 +6,8 @@
 
 A new [Ruby gem](https://github.com/bootstraponline/meta/wiki/Sauce_Ruby_Integration_Roadmap) for using RSpec on Sauce.
 
-**In development. Not ready to be used.**
 
+```
+require 'sauce_rspec'
+require 'sauce_rspec/rspec'
+```

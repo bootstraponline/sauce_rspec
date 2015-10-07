@@ -3,5 +3,4 @@ require 'webdriver_utils'
 
 require_relative 'sauce_rspec/version'
 require_relative 'sauce_rspec/config'
-require_relative 'sauce_rspec/rspec_caps'
 require_relative 'sauce_rspec/jenkins'

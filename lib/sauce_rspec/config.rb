@@ -32,8 +32,11 @@ module SauceRSpec
       @port = '80'
     end
 
+    # We're able to run on sauce if we have a user, key, host, and port
+    # caps and opts aren't required to run on sauce because the user may
+    # provide the caps outside of the SauceRSpec config.
     def sauce?
-      @user && @key
+      @user && @key && @host && @port
     end
 
     def to_h
