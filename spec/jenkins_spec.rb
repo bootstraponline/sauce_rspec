@@ -10,19 +10,19 @@ describe ' SauceRSpec Jenkins' do
   end
 
   def stub_run_after_test_hooks
-    passed_true_json = %q({"passed":true})
+    passed_true_json = '{"passed":true}'
 
-    stub_request(:put, 'https://appium_user:appium_key@saucelabs.com/rest/v1/appium_user/jobs/123').
-      with(body: passed_true_json).
-      to_return(body: passed_true_json)
+    stub_request(:put, 'https://appium_user:appium_key@saucelabs.com/rest/v1/appium_user/jobs/123')
+      .with(body: passed_true_json)
+      .to_return(body: passed_true_json)
   end
 
-    def stub_run_after_test_hooks_error
-    passed_true_json = %q({"passed":true})
+  def stub_run_after_test_hooks_error
+    passed_true_json = '{"passed":true}'
 
-    stub_request(:put, 'https://appium_user:appium_key@saucelabs.com/rest/v1/appium_user/jobs/123').
-      with(body: passed_true_json).
-      to_return(body: %q({"error": "Not authorized"}))
+    stub_request(:put, 'https://appium_user:appium_key@saucelabs.com/rest/v1/appium_user/jobs/123')
+      .with(body: passed_true_json)
+      .to_return(body: '{"error": "Not authorized"}')
   end
 
   it 'integrates with Jenkins properly' do
@@ -33,21 +33,23 @@ describe ' SauceRSpec Jenkins' do
       end
     end.new
 
+    stdout = StringIO.new
+
     # Verify connection refused error returns immediately
     stub_run_after_test_hooks_error
-    expect { SauceRSpec.run_after_test_hooks timeout: 999 }.to raise_error ::Errno::ECONNREFUSED
+    expect { SauceRSpec.run_after_test_hooks timeout: 999, stdout: stdout }.to raise_error ::Errno::ECONNREFUSED
 
     # make sure running the hook more than once works as expected.
     stub_run_after_test_hooks
-    SauceRSpec.run_after_test_hooks timeout: 1
-
-    stub_run_after_test_hooks
-    stdout = StringIO.new
     SauceRSpec.run_after_test_hooks timeout: 1, stdout: stdout
 
-    stdout.flush
+    stub_run_after_test_hooks
+    # clear StringIO
     stdout.rewind
-    stdout_data = stdout.read.strip
+    stdout.truncate 0
+    SauceRSpec.run_after_test_hooks timeout: 1, stdout: stdout
+
+    stdout_data = stdout.string.strip
     stdout.close
 
     expect(stdout_data).to eq('SauceOnDemandSessionID=123 job-name=integrates with Jenkins properly')

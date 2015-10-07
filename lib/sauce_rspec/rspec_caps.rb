@@ -18,7 +18,7 @@ module RSpec
           # ex: 1_firefox, 2_firefox
           @caps.each_with_index do |cap, index|
             ex_with_cap = ex.clone
-            new_id = "#{ex_with_cap.id}_#{index}_#{cap}"
+            new_id      = "#{ex_with_cap.id}_#{index}_#{cap}"
             ex_with_cap.instance_variable_set(:@id, new_id)
             ex_with_cap.instance_eval "def caps; #{cap}; end"
             new_examples << ex_with_cap
