@@ -44,7 +44,7 @@ module SauceRSpec
     # caps and opts aren't required to run on sauce because the user may
     # provide the caps outside of the SauceRSpec config.
     def sauce?
-      @user && @key && @host && @port
+      !!(@user && @key && @host && @port)
     end
 
     def to_h
@@ -65,6 +65,32 @@ module SauceRSpec
     def config &block
       return @config unless block_given?
       block.call @config
+
+      # Set test-queue-split workers to the Sauce concurrency limit by default
+      test_queue_workers = 'TEST_QUEUE_WORKERS'
+      if SauceRSpec.config.sauce? && (!ENV[test_queue_workers] || ENV[test_queue_workers].empty?)
+        user = SauceRSpec.config.user
+        url  = "https://saucelabs.com/rest/v1/users/#{user}/concurrency"
+
+        SauceRSpec.sauce_request.url = url
+
+        wait_true(2 * 60) do
+          sauce_request.http_get
+          response = JSON.parse(sauce_request.body_str) rescue {}
+
+          response_error = response['error'] || ''
+
+          if sauce_request.status.include? '401' # not authorized
+            fail(::Errno::ECONNREFUSED, response_error)
+          end
+
+          concurrency = response['concurrency'][user]['remaining']['overall'] rescue false
+          ENV[test_queue_workers] = concurrency if concurrency
+
+          concurrency ? true : fail(response)
+        end
+      end
+
       @config
     end
   end # class << self

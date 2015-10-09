@@ -57,40 +57,42 @@ module SauceRSpec
       caps
     end
 
-    private
+    def sauce_request
+      return @sauce_request if @sauce_request
 
-    attr_reader :update_job
+      config = SauceRSpec.config
+      user   = config.user
+      key    = config.key
+
+      request                 = Curl::Easy.new('')
+      request.http_auth_types = :basic
+      request.username        = user
+      request.password        = key
+
+      @sauce_request = request
+    end
+
+    private
 
     # @param timeout <Integer> timeout in seconds to wait for sauce labs response
     def update_job_status_on_sauce timeout
       # https://docs.saucelabs.com/reference/rest-api/#update-job
       # https://saucelabs.com/rest/v1/:username/jobs/:job_id
-      config = SauceRSpec.config
-      user   = config.user
-      unless update_job
-        key = config.key
-
-        request                 = Curl::Easy.new('')
-        request.http_auth_types = :basic
-        request.username        = user
-        request.password        = key
-
-        @update_job = request
-      end
+      user = SauceRSpec.config.user
 
       passed = RSpec.current_example.exception.nil?
       passed = { passed: passed }
       url    = "https://saucelabs.com/rest/v1/#{user}/jobs/#{driver.session_id}"
 
-      update_job.url = url
+      sauce_request.url = url
 
       wait_true(timeout) do
-        update_job.http_put passed.to_json
-        response = JSON.parse(update_job.body_str) rescue {}
+        sauce_request.http_put passed.to_json
+        response = JSON.parse(sauce_request.body_str) rescue {}
         response_passed = response['passed']
         response_error  = response['error'] || ''
 
-        if response_error.include? 'Not authorized'
+        if sauce_request.status.include? '401' # not authorized
           fail(::Errno::ECONNREFUSED, response_error)
         end
 
