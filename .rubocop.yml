@@ -10,3 +10,5 @@ Metrics/AbcSize:
   Enabled: false
 Style/RescueModifier:
   Enabled: false
+Style/SpaceAroundOperators:
+  Enabled: false

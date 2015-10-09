@@ -1,7 +1,5 @@
 require_relative 'lib/sauce_rspec/version'
 
-# rubocop:disable Style/SpaceAroundOperators
-
 Gem::Specification.new do |spec|
   spec.required_ruby_version = '>= 2.2.2'
 

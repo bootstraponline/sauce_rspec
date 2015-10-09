@@ -52,7 +52,7 @@ describe 'SauceRSpec Jenkins' do
     actual_data = stdout.string.strip
     stdout.close
 
-    expected_data = 'SauceOnDemandSessionID=123 job-name=SauceRSpec Jenkins' +
+    expected_data = 'SauceOnDemandSessionID=123 job-name=SauceRSpec Jenkins' \
     ' integrates with Jenkins properly - https://saucelabs.com/beta/tests/123'
     expect(actual_data).to eq(expected_data)
   end
