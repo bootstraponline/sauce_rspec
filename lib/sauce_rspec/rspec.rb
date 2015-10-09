@@ -2,6 +2,11 @@ require 'rspec'
 
 module RSpec
   module Core
+    class Example
+      # metadata is memoized so define a custom caps method.
+      attr_accessor :caps
+    end
+
     class World
       alias_method :rspec_register, :register
 
@@ -22,7 +27,9 @@ module RSpec
             ex_with_cap = ex.clone
             new_id      = "#{ex_with_cap.id}_#{index}_#{cap}"
             ex_with_cap.instance_variable_set(:@id, new_id)
-            ex_with_cap.metadata[:caps] = cap
+            # can *not* use metadata[:caps] because rspec will memoize the
+            # value and then reuse it for all the examples.
+            ex_with_cap.caps = cap
             new_examples << ex_with_cap
           end
         end

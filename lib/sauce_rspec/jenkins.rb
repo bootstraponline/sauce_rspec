@@ -26,19 +26,33 @@ module SauceRSpec
     # Returns the caps for the current RSpec example with the Sauce Labs
     # job name set.
     def update_example_caps
-      example                             = RSpec.current_example
-      caps                                = example.metadata[:caps]
-      description                         = example.full_description
-      browser                             = caps[:browserName].capitalize
-      version                             = caps[:platformVersion] || caps[:version]
-      platform                            = caps[:platformName] || caps[:platform]
+      example = RSpec.current_example
+      meta    = example.metadata
+
+      # Store a copy of the original description if it's not already saved.
+      unless meta[:old_full_description]
+        meta[:old_description]      = example.description
+        meta[:old_full_description] = example.full_description
+      end
+
+      # Reset the description to ensure previous runs don't mess with the value
+      meta[:description]      = meta[:old_description]
+      meta[:full_description] = meta[:old_full_description]
+
+      caps             = example.caps
+      full_description = example.full_description
+
+      browser                  = caps[:browserName].capitalize
+      version                  = caps[:platformVersion] || caps[:version]
+      platform                 = caps[:platformName] || caps[:platform]
 
       # Set Sauce Labs job_name
-      browser_version_platform            = [browser, version, '-', platform].join ' '
-      caps[:name]                         = [description, '-', browser_version_platform].join ' '
+      browser_version_platform = [browser, version, '-', platform].join ' '
+      caps[:name]              = [full_description, '-', browser_version_platform].join ' '
 
       # Add browser info to full description for RSpec progress reporter.
-      example.metadata[:full_description] += "\n#{' ' * 5 + browser_version_platform}"
+      meta[:full_description]  += "\n#{' ' * 5 + browser_version_platform}"
+      meta[:description]       += " - #{browser_version_platform}"
 
       caps
     end
