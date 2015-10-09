@@ -18,7 +18,7 @@ class ::Default < Thor
     exec 'bundle exec rspec spec'
   end
 
-  desc 'cop', 'Executes rubocop'
+  desc 'cop', 'Execute rubocop'
   def cop
     exec 'bundle exec rubocop --display-cop-names'
   end

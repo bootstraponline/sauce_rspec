@@ -1,6 +1,6 @@
 require_relative 'helper/spec_helper'
 
-describe ' SauceRSpec Jenkins' do
+describe 'SauceRSpec Jenkins' do
   before do
     SauceRSpec.config.clear
     SauceRSpec.config do |config|
@@ -49,9 +49,11 @@ describe ' SauceRSpec Jenkins' do
     stdout.truncate 0
     SauceRSpec.run_after_test_hooks timeout: 1, stdout: stdout
 
-    stdout_data = stdout.string.strip
+    actual_data = stdout.string.strip
     stdout.close
 
-    expect(stdout_data).to eq('SauceOnDemandSessionID=123 job-name=integrates with Jenkins properly')
+    expected_data = 'SauceOnDemandSessionID=123 job-name=SauceRSpec Jenkins' +
+    ' integrates with Jenkins properly - https://saucelabs.com/beta/tests/123'
+    expect(actual_data).to eq(expected_data)
   end
 end

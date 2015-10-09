@@ -22,7 +22,7 @@ module RSpec
             ex_with_cap = ex.clone
             new_id      = "#{ex_with_cap.id}_#{index}_#{cap}"
             ex_with_cap.instance_variable_set(:@id, new_id)
-            ex_with_cap.instance_eval "def caps; #{cap}; end"
+            ex_with_cap.metadata[:caps] = cap
             new_examples << ex_with_cap
           end
         end

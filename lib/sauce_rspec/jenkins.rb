@@ -6,14 +6,41 @@ module SauceRSpec
   class << self
     attr_reader :driver
 
+    # Fully initialized Selenium Webdriver.
     def driver= driver
       fail 'Driver must not be nil' unless driver
-      @driver = driver
+      @driver                             = driver
+
+      # Attach session_id to the current RSpec example.
+      example                             = RSpec.current_example
+      session_id                          = driver.session_id
+      example.metadata[:session_id]       = session_id
+      example.metadata[:full_description] += " - https://saucelabs.com/beta/tests/#{session_id}"
     end
 
     def run_after_test_hooks timeout: 60, stdout: $stdout
       jenkins(stdout) if jenkins?
       update_job_status_on_sauce(timeout) if SauceRSpec.config.sauce?
+    end
+
+    # Returns the caps for the current RSpec example with the Sauce Labs
+    # job name set.
+    def update_example_caps
+      example                             = RSpec.current_example
+      caps                                = example.metadata[:caps]
+      description                         = example.full_description
+      browser                             = caps[:browserName].capitalize
+      version                             = caps[:platformVersion] || caps[:version]
+      platform                            = caps[:platformName] || caps[:platform]
+
+      # Set Sauce Labs job_name
+      browser_version_platform            = [browser, version, '-', platform].join ' '
+      caps[:name]                         = [description, '-', browser_version_platform].join ' '
+
+      # Add browser info to full description for RSpec progress reporter.
+      example.metadata[:full_description] += "\n#{' ' * 5 + browser_version_platform}"
+
+      caps
     end
 
     private
@@ -59,7 +86,7 @@ module SauceRSpec
 
     def jenkins stdout
       session_id = driver.session_id
-      job_name   = RSpec.current_example.description
+      job_name   = RSpec.current_example.full_description
       # https://github.com/jenkinsci/sauce-ondemand-plugin/blob/2dbf9cf057d03480d020050a842aa23f595e4a3d/src/main/java/hudson/plugins/sauce_ondemand/SauceOnDemandBuildAction.java#L44
       stdout.puts "SauceOnDemandSessionID=#{session_id} job-name=#{job_name}"
     end
