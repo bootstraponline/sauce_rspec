@@ -70,22 +70,15 @@ module SauceRSpec
       test_queue_workers = 'TEST_QUEUE_WORKERS'
       if SauceRSpec.config.sauce? && (!ENV[test_queue_workers] || ENV[test_queue_workers].empty?)
         user = SauceRSpec.config.user
-        url  = "https://saucelabs.com/rest/v1/users/#{user}/concurrency"
+        SauceRSpec.set_sauce_request_url "users/#{user}/concurrency"
 
-        SauceRSpec.sauce_request.url = url
+        sauce_request = SauceRSpec.sauce_request
 
         wait_true(2 * 60) do
           sauce_request.http_get
-          response = JSON.parse(sauce_request.body_str) rescue {}
-
-          response_error = response['error'] || ''
-
-          if sauce_request.status.include? '401' # not authorized
-            fail(::Errno::ECONNREFUSED, response_error)
-          end
-
+          response = parse_response sauce_request
           concurrency = response['concurrency'][user]['remaining']['overall'] rescue false
-          ENV[test_queue_workers] = concurrency if concurrency
+          ENV[test_queue_workers] = concurrency.to_s if concurrency
 
           concurrency ? true : fail(response)
         end

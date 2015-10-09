@@ -72,6 +72,22 @@ module SauceRSpec
       @sauce_request = request
     end
 
+    def set_sauce_request_url url
+      sauce_request.url = "https://saucelabs.com/rest/v1/#{url}"
+    end
+
+    def parse_response request
+      fail 'request must be an instance of Curl::Easy' unless request.is_a?(Curl::Easy)
+      response = JSON.parse(request.body_str) rescue {}
+
+      if request.status.include? '401' # not authorized
+        response_error = response['error'] || ''
+        fail(::Errno::ECONNREFUSED, response_error)
+      end
+
+      response
+    end
+
     private
 
     # @param timeout <Integer> timeout in seconds to wait for sauce labs response
@@ -79,24 +95,16 @@ module SauceRSpec
       # https://docs.saucelabs.com/reference/rest-api/#update-job
       # https://saucelabs.com/rest/v1/:username/jobs/:job_id
       user = SauceRSpec.config.user
-
       passed = RSpec.current_example.exception.nil?
       passed = { passed: passed }
-      url    = "https://saucelabs.com/rest/v1/#{user}/jobs/#{driver.session_id}"
+      url    = "#{user}/jobs/#{driver.session_id}"
 
-      sauce_request.url = url
+      set_sauce_request_url url
 
       wait_true(timeout) do
         sauce_request.http_put passed.to_json
-        response = JSON.parse(sauce_request.body_str) rescue {}
-        response_passed = response['passed']
-        response_error  = response['error'] || ''
-
-        if sauce_request.status.include? '401' # not authorized
-          fail(::Errno::ECONNREFUSED, response_error)
-        end
-
-        response_passed == passed[:passed] ? true : fail(response)
+        response = parse_response sauce_request
+        response['passed'] == passed[:passed] ? true : fail(response)
       end
     end
 
