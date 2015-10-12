@@ -63,6 +63,7 @@ module SauceRSpec
       mutex do
         return @hurley_client if @hurley_client
         client                              = @hurley_client = Hurley::Client.new 'https://saucelabs.com/rest/v1/'
+        client.header[:content_type]        = "application/json"
         client.request_options.timeout      = 2 * 60
         client.request_options.open_timeout = 2 * 60
 
@@ -89,8 +90,8 @@ module SauceRSpec
 
     # @param timeout <Integer> timeout in seconds to wait for sauce labs response
     def update_job_status_on_sauce timeout
+      # PUT https://saucelabs.com/rest/v1/:username/jobs/:job_id
       # https://docs.saucelabs.com/reference/rest-api/#update-job
-      # https://saucelabs.com/rest/v1/:username/jobs/:job_id
       user           = SauceRSpec.config.user
       passed         = RSpec.current_example.exception.nil?
       passed         = { passed: passed }
