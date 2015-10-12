@@ -57,9 +57,8 @@ module SauceRSpec
       caps
     end
 
-    def sauce_request
-      return @sauce_request if @sauce_request
-
+    # Create a new Curl::Easy object each time to avoid segfaulting
+    def new_sauce_request url
       config = SauceRSpec.config
       user   = config.user
       key    = config.key
@@ -68,12 +67,9 @@ module SauceRSpec
       request.http_auth_types = :basic
       request.username        = user
       request.password        = key
+      request.url             = "https://saucelabs.com/rest/v1/#{url}"
 
-      @sauce_request = request
-    end
-
-    def set_sauce_request_url url
-      sauce_request.url = "https://saucelabs.com/rest/v1/#{url}"
+      request
     end
 
     def parse_response request
@@ -94,12 +90,11 @@ module SauceRSpec
     def update_job_status_on_sauce timeout
       # https://docs.saucelabs.com/reference/rest-api/#update-job
       # https://saucelabs.com/rest/v1/:username/jobs/:job_id
-      user = SauceRSpec.config.user
+      user   = SauceRSpec.config.user
       passed = RSpec.current_example.exception.nil?
       passed = { passed: passed }
-      url    = "#{user}/jobs/#{driver.session_id}"
 
-      set_sauce_request_url url
+      sauce_request = new_sauce_request "#{user}/jobs/#{driver.session_id}"
 
       wait_true(timeout) do
         sauce_request.http_put passed.to_json

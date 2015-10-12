@@ -69,10 +69,8 @@ module SauceRSpec
       # Set test-queue-split workers to the Sauce concurrency limit by default
       test_queue_workers = 'TEST_QUEUE_WORKERS'
       if SauceRSpec.config.sauce? && (!ENV[test_queue_workers] || ENV[test_queue_workers].empty?)
-        user = SauceRSpec.config.user
-        SauceRSpec.set_sauce_request_url "users/#{user}/concurrency"
-
-        sauce_request = SauceRSpec.sauce_request
+        user          = SauceRSpec.config.user
+        sauce_request = SauceRSpec.new_sauce_request "users/#{user}/concurrency"
 
         wait_true(2 * 60) do
           sauce_request.http_get
