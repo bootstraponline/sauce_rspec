@@ -33,4 +33,5 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency 'bundler', '~> 1.10.6'
   spec.add_development_dependency 'rake', '~> 10.4.2'
   spec.add_development_dependency 'rubocop', '~> 0.34.2'
+  spec.add_development_dependency 'trace_files', '~> 1.0.0'
 end

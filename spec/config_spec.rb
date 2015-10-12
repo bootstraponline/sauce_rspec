@@ -5,7 +5,8 @@ describe SauceRSpec::Config do
 
   before do
     SauceRSpec.config do |config|
-      config.caps = cap_array
+      config.caps                = cap_array
+      config.concurrency_timeout = 0.5
     end
   end
 
@@ -35,35 +36,6 @@ describe SauceRSpec::Config do
     expected_opts = { sauce_custom: custom_value, sauce_custom_2: custom_2_value }
 
     expect(actual_opts).to eq(expected_opts)
-  end
-
-  def user_value
-    'some user'
-  end
-
-  def key_value
-    'some key'
-  end
-
-  def port_value
-    'some port'
-  end
-
-  def host_value
-    'some host'
-  end
-
-  def config_with_user_key_port_host
-    SauceRSpec.config do |config|
-      config.user = user_value
-      config.key  = key_value
-      config.port = port_value
-      config.host = host_value
-    end
-  end
-
-  def expected_cap_value
-    [{ browserName: 'firefox', platform: 'Windows 2012', version: '37' }]
   end
 
   it 'supports first class options' do

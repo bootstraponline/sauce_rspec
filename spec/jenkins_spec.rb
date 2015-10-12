@@ -3,16 +3,18 @@ require_relative 'helper/spec_helper'
 describe 'SauceRSpec Jenkins' do
   before do
     SauceRSpec.config.clear
+    stub_concurrency_request
     SauceRSpec.config do |config|
-      config.user = 'appium_user'
-      config.key  = 'appium_key'
+      config.user                = user_value
+      config.key                 = key_value
+      config.concurrency_timeout = 0.5
     end
   end
 
   def stub_run_after_test_hooks
     passed_true_json = '{"passed":true}'
 
-    stub_request(:put, 'https://appium_user:appium_key@saucelabs.com/rest/v1/appium_user/jobs/123')
+    stub_request(:put, "https://#{user_value}:#{key_value}@saucelabs.com/rest/v1/#{user_value}/jobs/123")
       .with(body: passed_true_json)
       .to_return(body: passed_true_json)
   end
@@ -20,7 +22,7 @@ describe 'SauceRSpec Jenkins' do
   def stub_run_after_test_hooks_error
     passed_true_json = '{"passed":true}'
 
-    stub_request(:put, 'https://appium_user:appium_key@saucelabs.com/rest/v1/appium_user/jobs/123')
+    stub_request(:put, "https://#{user_value}:#{key_value}@saucelabs.com/rest/v1/#{user_value}/jobs/123")
       .with(body: passed_true_json)
       .to_return(body: '{"error": "Not authorized"}')
   end

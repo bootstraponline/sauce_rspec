@@ -1,6 +1,6 @@
 module SauceRSpec
   class Config
-    attr_reader :caps
+    attr_reader :caps, :concurrency_timeout
     attr_accessor :opts, :user, :key, :host, :port
 
     public
@@ -16,6 +16,11 @@ module SauceRSpec
       fail 'Missing host' unless host
       fail 'Missing port' unless port
       "http://#{user}:#{key}@#{host}:#{port}/wd/hub"
+    end
+
+    def concurrency_timeout= value
+      fail 'concurrency_timeout must be a numeric' unless value.is_a?(Numeric)
+      @concurrency_timeout = value
     end
 
     def caps= value
@@ -69,11 +74,12 @@ module SauceRSpec
       # Set test-queue-split workers to the Sauce concurrency limit by default
       test_queue_workers = 'TEST_QUEUE_WORKERS'
       if SauceRSpec.config.sauce? && (!ENV[test_queue_workers] || ENV[test_queue_workers].empty?)
-        user            = SauceRSpec.config.user
-        hurley_client   = SauceRSpec.hurley_client
-        concurrency_url = "users/#{user}/concurrency"
+        user                = SauceRSpec.config.user
+        hurley_client       = SauceRSpec.hurley_client
+        concurrency_url     = "users/#{user}/concurrency"
+        concurrency_timeout = SauceRSpec.config.concurrency_timeout || 2 * 60
 
-        wait_true(2 * 60) do
+        wait_true(concurrency_timeout) do
           body = hurley_client.get(concurrency_url).body
           concurrency = body['concurrency'][user]['remaining']['overall'] rescue false
           ENV[test_queue_workers] = concurrency.to_s if concurrency

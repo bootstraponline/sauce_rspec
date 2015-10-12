@@ -63,7 +63,7 @@ module SauceRSpec
       mutex do
         return @hurley_client if @hurley_client
         client                              = @hurley_client = Hurley::Client.new 'https://saucelabs.com/rest/v1/'
-        client.header[:content_type]        = "application/json"
+        client.header[:content_type]        = 'application/json'
         client.request_options.timeout      = 2 * 60
         client.request_options.open_timeout = 2 * 60
 
@@ -76,8 +76,11 @@ module SauceRSpec
         client.after_call do |response|
           response.body = Oj.load(response.body) rescue {}
 
-          if %i(client_error server_error).include? response.status_type
-            response_error = response.body['error'] || ''
+          client_server_error = %i(client_error server_error).include? response.status_type
+          body_error          = response.body['error']
+
+          if client_server_error || body_error
+            response_error = body_error || ''
             fail(::Errno::ECONNREFUSED, response_error)
           end
         end
