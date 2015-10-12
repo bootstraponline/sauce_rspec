@@ -1,3 +1,14 @@
+#### v1.0.2 2015-10-12
+
+- [21b3df0](https://github.com/bootstraponline/sauce_rspec/commit/21b3df0b6042fc93a2426522213b0bfdd4902db7) Release 1.0.2
+- [d21bd01](https://github.com/bootstraponline/sauce_rspec/commit/d21bd01bafff4cfd8a87469094ad7b53998b9130) Fix thor cop and thor spec
+- [25504d1](https://github.com/bootstraponline/sauce_rspec/commit/25504d1d13d3da96445e80c4009083ee43ae34d1) Fix Oj.dump
+- [780496e](https://github.com/bootstraponline/sauce_rspec/commit/780496e1547bad10fe55e3bdba7624cfb0f6183a) Use hurely for HTTP instead of curb
+- [3ac6a7c](https://github.com/bootstraponline/sauce_rspec/commit/3ac6a7c106bedd8669be4b9b730280c3b9e9fd77) Create a new Curl::Easy object each time
+- [03ddc81](https://github.com/bootstraponline/sauce_rspec/commit/03ddc81a6a0a1d5d3b36a61f34210e3ebfcb5d6f) Clean up Sauce API code
+- [7bc7a24](https://github.com/bootstraponline/sauce_rspec/commit/7bc7a24a06c60ee874b8f360b87598544d0fe891) Add concurrency detection. Fix 401 check
+
+
 #### v1.0.1 2015-10-08
 
 - [52bcf9f](https://github.com/bootstraponline/sauce_rspec/commit/52bcf9fd9dc970122a42fb7eb407de2a9ff37db5) Release 1.0.1
