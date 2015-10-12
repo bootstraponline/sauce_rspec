@@ -1,6 +1,10 @@
 require 'rubygems'
+require 'oj'
 require 'webdriver_utils'
+require 'addressable/uri'
+require 'hurley'
+require 'hurley/addressable'
 
 require_relative 'sauce_rspec/version'
 require_relative 'sauce_rspec/config'
-require_relative 'sauce_rspec/jenkins'
+require_relative 'sauce_rspec/sauce_rspec'

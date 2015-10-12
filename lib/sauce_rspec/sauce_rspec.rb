@@ -1,10 +1,12 @@
-require 'rubygems'
-require 'curb'
-require 'json'
-
 module SauceRSpec
   class << self
     attr_reader :driver
+
+    MUTEX = Mutex.new
+    # from: https://github.com/lostisland/hurley/blob/b61f4c96bcfa4fcd51c6718bc05f13e1c2ba01e6/lib/hurley.rb#L17
+    def mutex
+      MUTEX.synchronize(&Proc.new)
+    end
 
     # Fully initialized Selenium Webdriver.
     def driver= driver
@@ -57,31 +59,30 @@ module SauceRSpec
       caps
     end
 
-    # Create a new Curl::Easy object each time to avoid segfaulting
-    def new_sauce_request url
-      config = SauceRSpec.config
-      user   = config.user
-      key    = config.key
+    def hurley_client
+      mutex do
+        return @hurley_client if @hurley_client
+        client                              = @hurley_client = Hurley::Client.new 'https://saucelabs.com/rest/v1/'
+        client.request_options.timeout      = 2 * 60
+        client.request_options.open_timeout = 2 * 60
 
-      request                 = Curl::Easy.new('')
-      request.http_auth_types = :basic
-      request.username        = user
-      request.password        = key
-      request.url             = "https://saucelabs.com/rest/v1/#{url}"
+        config              = SauceRSpec.config
+        client.url.user     = config.user
+        client.url.password = config.key
 
-      request
-    end
+        # Ensure body JSON string is parsed into a hash
+        # Detect errors and fail so wait_true will retry the request
+        client.after_call do |response|
+          response.body = Oj.load(response.body) rescue {}
 
-    def parse_response request
-      fail 'request must be an instance of Curl::Easy' unless request.is_a?(Curl::Easy)
-      response = JSON.parse(request.body_str) rescue {}
+          if %i(client_error server_error).include? response.status_type
+            response_error = response.body['error'] || ''
+            fail(::Errno::ECONNREFUSED, response_error)
+          end
+        end
 
-      if request.status.include? '401' # not authorized
-        response_error = response['error'] || ''
-        fail(::Errno::ECONNREFUSED, response_error)
+        @hurley_client
       end
-
-      response
     end
 
     private
@@ -90,16 +91,15 @@ module SauceRSpec
     def update_job_status_on_sauce timeout
       # https://docs.saucelabs.com/reference/rest-api/#update-job
       # https://saucelabs.com/rest/v1/:username/jobs/:job_id
-      user   = SauceRSpec.config.user
-      passed = RSpec.current_example.exception.nil?
-      passed = { passed: passed }
-
-      sauce_request = new_sauce_request "#{user}/jobs/#{driver.session_id}"
+      user           = SauceRSpec.config.user
+      passed         = RSpec.current_example.exception.nil?
+      passed         = { passed: passed }
+      passed_json    = Oj.dump(passed)
+      update_job_url = "#{user}/jobs/#{driver.session_id}"
 
       wait_true(timeout) do
-        sauce_request.http_put passed.to_json
-        response = parse_response sauce_request
-        response['passed'] == passed[:passed] ? true : fail(response)
+        body = hurley_client.put(update_job_url, passed_json).body
+        body['passed'] == passed[:passed] ? true : fail(body)
       end
     end
 
