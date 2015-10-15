@@ -55,7 +55,7 @@ describe 'SauceRSpec Jenkins' do
     stdout.close
 
     expected_data = 'SauceOnDemandSessionID=123 job-name=SauceRSpec Jenkins' \
-    ' integrates with Jenkins properly - https://saucelabs.com/beta/tests/123'
+    ' integrates with Jenkins properly'
     expect(actual_data).to eq(expected_data)
   end
 end

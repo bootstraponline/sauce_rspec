@@ -11,13 +11,14 @@ module SauceRSpec
     # Fully initialized Selenium Webdriver.
     def driver= driver
       fail 'Driver must not be nil' unless driver
-      @driver                             = driver
+      @driver                       = driver
 
       # Attach session_id to the current RSpec example.
-      example                             = RSpec.current_example
-      session_id                          = driver.session_id
-      example.metadata[:session_id]       = session_id
-      example.metadata[:full_description] += " - https://saucelabs.com/beta/tests/#{session_id}"
+      example                       = RSpec.current_example
+      session_id                    = driver.session_id
+      example.metadata[:session_id] = session_id
+      # don't attach sauce link to description because it messes up
+      # the sauce jenkin's plugin ability to match job names to junit names
     end
 
     def run_after_test_hooks timeout: 60, stdout: $stdout
@@ -28,18 +29,16 @@ module SauceRSpec
     # Returns the caps for the current RSpec example with the Sauce Labs
     # job name set.
     def update_example_caps
-      example = RSpec.current_example
-      meta    = example.metadata
+      example                     = RSpec.current_example
+      meta                        = example.metadata
 
       # Store a copy of the original description if it's not already saved.
-      unless meta[:old_full_description]
-        meta[:old_description]      = example.description
-        meta[:old_full_description] = example.full_description
-      end
+      meta[:old_description]      = example.description unless meta[:old_description]
+      meta[:old_full_description] = example.full_description unless meta[:old_full_description]
 
       # Reset the description to ensure previous runs don't mess with the value
-      meta[:description]      = meta[:old_description]
-      meta[:full_description] = meta[:old_full_description]
+      meta[:description]          = meta[:old_description]
+      meta[:full_description]     = meta[:old_full_description]
 
       caps             = example.caps
       full_description = example.full_description
@@ -52,9 +51,11 @@ module SauceRSpec
       browser_version_platform = [browser, version, '-', platform].join ' '
       caps[:name]              = [full_description, '-', browser_version_platform].join ' '
 
-      # Add browser info to full description for RSpec progress reporter.
-      meta[:full_description]  += "\n#{' ' * 5 + browser_version_platform}"
-      meta[:description]       += " - #{browser_version_platform}"
+      # Add browser info to description to ensure test names are unique
+      # Otherwise the same test run on multiple browsers will not have a different name
+      extra_description        = " - #{browser_version_platform}"
+      meta[:full_description]  += extra_description
+      meta[:description]       += extra_description
 
       caps
     end
