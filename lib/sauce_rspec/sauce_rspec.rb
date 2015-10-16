@@ -11,12 +11,12 @@ module SauceRSpec
     # Fully initialized Selenium Webdriver.
     def driver= driver
       fail 'Driver must not be nil' unless driver
-      @driver                       = driver
+      @driver                    = driver
 
       # Attach session_id to the current RSpec example.
-      example                       = RSpec.current_example
-      session_id                    = driver.session_id
-      example.metadata[:session_id] = session_id
+      sauce_test_link            = "https://saucelabs.com/beta/tests/#{driver.session_id}"
+      metadata                   = RSpec.current_example.metadata
+      metadata[:sauce_test_link] = sauce_test_link
       # don't attach sauce link to description because it messes up formatters
       # the formatters don't expect a link in the test name.
     end
