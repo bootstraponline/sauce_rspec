@@ -17,8 +17,8 @@ module SauceRSpec
       example                       = RSpec.current_example
       session_id                    = driver.session_id
       example.metadata[:session_id] = session_id
-      # don't attach sauce link to description because it messes up
-      # the sauce jenkin's plugin ability to match job names to junit names
+      # don't attach sauce link to description because it messes up formatters
+      # the formatters don't expect a link in the test name.
     end
 
     def run_after_test_hooks timeout: 60, stdout: $stdout
@@ -32,6 +32,9 @@ module SauceRSpec
       example                     = RSpec.current_example
       meta                        = example.metadata
 
+      # Must update the test description / full_description because we are
+      # duplicating the tests and the only difference is the capabilities.
+      #
       # Store a copy of the original description if it's not already saved.
       meta[:old_description]      = example.description unless meta[:old_description]
       meta[:old_full_description] = example.full_description unless meta[:old_full_description]
