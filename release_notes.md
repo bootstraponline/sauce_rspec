@@ -1,3 +1,11 @@
+#### v1.0.3 2015-10-16
+
+- [1529f39](https://github.com/bootstraponline/sauce_rspec/commit/1529f396f11f73b3a63f921492fd0382867b5a70) Release 1.0.3
+- [85c0506](https://github.com/bootstraponline/sauce_rspec/commit/85c050650b8203c0f5e7ec3dd4eed341007cde66) Add sauce_test_link to example.metadata
+- [f77dcc0](https://github.com/bootstraponline/sauce_rspec/commit/f77dcc011852a4310a56a181b27540a534760ade) Add comment about description modification
+- [d7a0f56](https://github.com/bootstraponline/sauce_rspec/commit/d7a0f56eb7427c52647dd7088b64a84d402208f9) Remove job link from example description
+
+
 #### v1.0.2 2015-10-12
 
 - [21b3df0](https://github.com/bootstraponline/sauce_rspec/commit/21b3df0b6042fc93a2426522213b0bfdd4902db7) Release 1.0.2
