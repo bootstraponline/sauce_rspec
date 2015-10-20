@@ -1,3 +1,9 @@
+#### v1.0.4 2015-10-20
+
+- [5a079f4](https://github.com/bootstraponline/sauce_rspec/commit/5a079f464ab372b0e134891754ee313f3a5ae4ed) Release 1.0.4
+- [b28728c](https://github.com/bootstraponline/sauce_rspec/commit/b28728c698936171cc564bda24258d728cd47dbf) Update oj dependency
+
+
 #### v1.0.3 2015-10-16
 
 - [1529f39](https://github.com/bootstraponline/sauce_rspec/commit/1529f396f11f73b3a63f921492fd0382867b5a70) Release 1.0.3
