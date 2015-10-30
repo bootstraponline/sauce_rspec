@@ -44,6 +44,7 @@ module SauceRSpec
       meta[:full_description]     = meta[:old_full_description]
 
       caps             = example.caps
+      fail 'Example has no caps' unless caps
       full_description = example.full_description
 
       browser                  = caps[:browserName].capitalize
@@ -103,6 +104,7 @@ module SauceRSpec
       passed         = RSpec.current_example.exception.nil?
       passed         = { passed: passed }
       passed_json    = Oj.dump(passed)
+      fail 'driver is nil' unless driver
       update_job_url = "#{user}/jobs/#{driver.session_id}"
 
       wait_true(timeout) do
