@@ -1,3 +1,10 @@
+#### v1.0.5 2015-10-30
+
+- [4d29cdd](https://github.com/bootstraponline/sauce_rspec/commit/4d29cdda614ac93b259913f3ca3b75a7a427417d) Release 1.0.5
+- [8bf5955](https://github.com/bootstraponline/sauce_rspec/commit/8bf5955c68b9f86b4b602a31b547ef12a41cef19) Use example_group.descendant_filtered_examples
+- [b3d929b](https://github.com/bootstraponline/sauce_rspec/commit/b3d929bbff13d9ea5bb91cd5d35b828fa8293ad1) Add asserts for caps/driver
+
+
 #### v1.0.4 2015-10-20
 
 - [5a079f4](https://github.com/bootstraponline/sauce_rspec/commit/5a079f464ab372b0e134891754ee313f3a5ae4ed) Release 1.0.4
