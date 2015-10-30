@@ -18,7 +18,9 @@ module RSpec
         config = ::SauceRSpec.config
         return rspec_register(example_group) unless config.sauce?
 
-        examples     = example_group.examples
+        # must use `descendant_filtered_examples` to ensure all examples
+        # including those from nested example groups are included.
+        examples     = example_group.descendant_filtered_examples
         new_examples = []
         examples.each do |ex|
           # Use index to allow multiple duplicate caps to have unique ids
