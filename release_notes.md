@@ -1,3 +1,9 @@
+#### v1.0.6 2015-10-30
+
+- [b87215b](https://github.com/bootstraponline/sauce_rspec/commit/b87215b545a12720c27795543cbb189fa236e06c) Release 1.0.6
+- [5dad028](https://github.com/bootstraponline/sauce_rspec/commit/5dad028b4c7cf3208cc9f52caa5d40bfea059421) Fix nested describe support
+
+
 #### v1.0.5 2015-10-30
 
 - [4d29cdd](https://github.com/bootstraponline/sauce_rspec/commit/4d29cdda614ac93b259913f3ca3b75a7a427417d) Release 1.0.5
