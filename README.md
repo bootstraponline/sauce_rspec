@@ -11,7 +11,7 @@ require 'sauce_rspec'
 require 'sauce_rspec/rspec'
 ```
 
-Note that for Jenkins support, you must enable verbose mod in test-queue
+Note that for Jenkins support, you must enable verbose mode in test-queue
 otherwise stdout will not be printed in the Jenkins log.
 
 ```
