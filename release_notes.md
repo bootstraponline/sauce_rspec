@@ -1,3 +1,12 @@
+#### v1.0.7 2016-06-08
+
+- [328e54a](https://github.com/bootstraponline/sauce_rspec/commit/328e54afeb638b0fe78e5fdefdaabc09383c09a0) Release 1.0.7
+- [5ec0f5a](https://github.com/bootstraponline/sauce_rspec/commit/5ec0f5ab6f276130da2acb8cf255405422c879e0) Update all gem deps
+- [18c65a3](https://github.com/bootstraponline/sauce_rspec/commit/18c65a34c47d5ffb0134a85fe6e5d1404060d1a5) Update sauce_rspec.gemspec
+- [a9b2ca7](https://github.com/bootstraponline/sauce_rspec/commit/a9b2ca7a8a24d2cd0311e1ecc13088e1e4d7a4b7) Update .travis.yml
+- [83a2e63](https://github.com/bootstraponline/sauce_rspec/commit/83a2e63956e365d8a1e86c3f2f3efcbf6b13b3de) Update README.md
+
+
 #### v1.0.6 2015-10-30
 
 - [b87215b](https://github.com/bootstraponline/sauce_rspec/commit/b87215b545a12720c27795543cbb189fa236e06c) Release 1.0.6
