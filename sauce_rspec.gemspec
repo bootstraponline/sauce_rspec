@@ -17,12 +17,12 @@ Gem::Specification.new do |spec|
     f.match(%r{^(test|spec|features)/})
   end
 
-  spec.add_runtime_dependency 'rspec', '~> 3.3.0'
-  spec.add_runtime_dependency 'webdriver_utils', '~> 1.0.2'
+  spec.add_runtime_dependency 'rspec', '>= 3.3.0'
+  spec.add_runtime_dependency 'webdriver_utils', '>= 1.0.2'
   # Recommended way of doing parallel execution
-  spec.add_runtime_dependency 'test-queue-split', '~> 0.3.2'
-  spec.add_runtime_dependency 'hurley', '~> 0.2'
-  spec.add_runtime_dependency 'addressable', '~> 2.3.8'
+  spec.add_runtime_dependency 'test-queue-split', '>= 0.3.2'
+  spec.add_runtime_dependency 'hurley', '>= 0.2'
+  spec.add_runtime_dependency 'addressable', '>= 2.3.8'
   spec.add_runtime_dependency 'oj', '>= 2.13'
 
   spec.add_development_dependency 'webmock', '~> 1.21.0'
