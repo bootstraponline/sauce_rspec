@@ -17,3 +17,26 @@ otherwise stdout will not be printed in the Jenkins log.
 ```
 export TEST_QUEUE_VERBOSE=true
 ```
+
+## Naming jobs
+
+Use Jenkins environment variables to correctly name jobs.
+
+```ruby
+# example sauce_helper.rb
+require 'sauce_platforms'
+
+SauceRSpec.config do |config|
+  config.caps = [
+    Platform.windows_10.firefox.v41,
+    Platform.windows_10.chrome.v45
+  ]
+
+  build = if jenkins?
+            [ENV['JOB_NAME'], ENV['BUILD_NUMBER']].join('-')
+          else
+            "sauce_rspec-#{SecureRandom.random_number(999_999)}"
+          end
+
+  config.default_caps({ build: build})
+end
