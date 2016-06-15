@@ -38,5 +38,5 @@ SauceRSpec.config do |config|
             "sauce_rspec-#{SecureRandom.random_number(999_999)}"
           end
 
-  config.default_caps({ build: build})
+  config.default_caps({ build: build })
 end
