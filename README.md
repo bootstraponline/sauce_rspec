@@ -40,3 +40,6 @@ SauceRSpec.config do |config|
 
   config.default_caps({ build: build })
 end
+```
+
+If you're using the Sauce Jenkins plugin then `ENV['JENKINS_BUILD_NUMBER']` will [already contain the job name and build number.](https://wiki.saucelabs.com/display/DOCS/Setting+Up+Reporting+between+Sauce+Labs+and+Jenkins)
