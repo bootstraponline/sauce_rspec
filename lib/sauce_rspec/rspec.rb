@@ -8,15 +8,15 @@ module RSpec
     end
 
     class World
-      alias_method :rspec_register, :register
+      alias_method :rspec_record, :record
 
       # @api private
       #
-      # Register an example group.
-      def register(example_group)
-        # Use upstream register method if we're not configured to run on Sauce
+      # record an example group.
+      def record(example_group)
+        # Use upstream record method if we're not configured to run on Sauce
         config = ::SauceRSpec.config
-        return rspec_register(example_group) unless config.sauce?
+        return rspec_record(example_group) unless config.sauce?
 
         # must iterate through descendants to handle nested describes
         example_group.descendants.each do |desc_group|
@@ -37,9 +37,9 @@ module RSpec
           desc_group.instance_variable_set(:@examples, new_examples)
         end
 
-        # invoke original register method
-        rspec_register(example_group)
+        # invoke original record method
+        rspec_record(example_group)
       end
     end
   end
-end unless RSpec::Core::World.method_defined? :rspec_register
+end unless RSpec::Core::World.method_defined? :rspec_record
