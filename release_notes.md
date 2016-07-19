@@ -1,3 +1,12 @@
+#### v2.0.0 2016-07-19
+
+- [2e27226](https://github.com/bootstraponline/sauce_rspec/commit/2e272260526e42f8556647b8e7b1d7315da47d7c) Release 2.0.0
+- [f443c41](https://github.com/bootstraponline/sauce_rspec/commit/f443c4189682243f6a5938aa2146bb5a7949734e) Update for RSpec 3.5: Rename register to record
+- [e8da74c](https://github.com/bootstraponline/sauce_rspec/commit/e8da74cc623da0c60cbc39ea59e3f06be3edca71) Fix spacing
+- [b1a35b0](https://github.com/bootstraponline/sauce_rspec/commit/b1a35b0bf3979b87ab0d2a66c4ea154952680c0f) Fix rubocop
+- [3f4b22d](https://github.com/bootstraponline/sauce_rspec/commit/3f4b22d432000d9ced920a5b68b69f3e733a3d6f) Update README.md
+
+
 #### v1.0.7 2016-06-08
 
 - [328e54a](https://github.com/bootstraponline/sauce_rspec/commit/328e54afeb638b0fe78e5fdefdaabc09383c09a0) Release 1.0.7
